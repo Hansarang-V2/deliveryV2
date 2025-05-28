@@ -8,7 +8,7 @@ import com.hansarangdelivery.restaurant.model.Restaurant;
 import com.hansarangdelivery.review.service.ReviewService;
 import com.hansarangdelivery.category.service.CategoryService;
 import com.hansarangdelivery.location.service.LocationService;
-import com.hansarangdelivery.menu.service.MenuItemService;
+import com.hansarangdelivery.menu.application.service.MenuItemService;
 import com.hansarangdelivery.user.model.User;
 import com.hansarangdelivery.global.exception.DuplicateResourceException;
 import com.hansarangdelivery.global.exception.ResourceNotFoundException;
@@ -88,9 +88,9 @@ public class RestaurantService {
         }
         Page<RestaurantResponseDto> mappedPage = restaurantRepositoryQuery.
             searchRestaurant(pageable, search,categoryId)
-            .map((restaurant)->{
-                double point = reviewService.countAverageRating(restaurant.getId());
-                return new RestaurantResponseDto(restaurant,point);
+            .map((restaurant) -> {
+                    double point = reviewService.countAverageRating(restaurant.getId());
+                    return new RestaurantResponseDto(restaurant, point);
                 }
 
             );
