@@ -1,6 +1,6 @@
-package com.hansarangdelivery.menu.repository;
+package com.hansarangdelivery.menu.domain.repository;
 
-import com.hansarangdelivery.menu.model.MenuItem;
+import com.hansarangdelivery.menu.domain.model.MenuItem;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

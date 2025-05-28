@@ -1,6 +1,6 @@
-package com.hansarangdelivery.menu.dto;
+package com.hansarangdelivery.menu.presentation.dto;
 
-import com.hansarangdelivery.menu.model.MenuItem;
+import com.hansarangdelivery.menu.domain.model.MenuItem;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,7 +26,7 @@ public class MenuItemResponseDto {
     @Schema(description = "메뉴 가격", example = "5000")
     private Integer price;
 
-    @Schema(description = "메뉴 가용 여부", example = "true")
+//    @Schema(description = "메뉴 가용 여부", example = "true")
     private boolean isAvailable;
 
     public MenuItemResponseDto(MenuItem menuItem) {
@@ -35,5 +35,4 @@ public class MenuItemResponseDto {
         this.price = menuItem.getPrice();
         this.isAvailable = menuItem.getIsAvailable();
     }
-
 }

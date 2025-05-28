@@ -1,7 +1,8 @@
-package com.hansarangdelivery.menu.repository;
+package com.hansarangdelivery.menu.infrastructure.repository;
 
-import com.hansarangdelivery.menu.model.MenuItem;
-import com.hansarangdelivery.menu.model.QMenuItem;
+import com.hansarangdelivery.menu.domain.model.MenuItem;
+import com.hansarangdelivery.menu.domain.repository.MenuItemRepositoryQuery;
+import com.hansarangdelivery.menu.domain.model.QMenuItem;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @RequiredArgsConstructor
 public class MenuItemRepositoryQueryImpl implements MenuItemRepositoryQuery {
 

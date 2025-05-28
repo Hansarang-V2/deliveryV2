@@ -2,9 +2,11 @@ package com.hansarangdelivery.menu.service;
 
 import com.hansarangdelivery.global.dto.PageResponseDto;
 import com.hansarangdelivery.global.exception.ResourceNotFoundException;
-import com.hansarangdelivery.menu.dto.MenuItemRequestDto;
-import com.hansarangdelivery.menu.dto.MenuItemResponseDto;
-import com.hansarangdelivery.menu.dto.MenuItemUpdateDto;
+import com.hansarangdelivery.menu.application.dto.MenuItemInternalResponseDto;
+import com.hansarangdelivery.menu.application.service.MenuItemService;
+import com.hansarangdelivery.menu.presentation.dto.CreateMenuItemRequestDto;
+import com.hansarangdelivery.menu.presentation.dto.MenuItemResponseDto;
+import com.hansarangdelivery.menu.presentation.dto.UpdateMenuItemRequestDto;
 import com.hansarangdelivery.restaurant.model.Restaurant;
 import com.hansarangdelivery.restaurant.repository.RestaurantRepository;
 import com.hansarangdelivery.security.jwt.JwtUtil;
@@ -53,7 +55,7 @@ class MenuItemServiceTest {
 
     UUID noneExistRestaurantId = UUID.randomUUID();
 
-    MenuItemResponseDto createMenuItem = null;
+    MenuItemInternalResponseDto createMenuItem = null;
 
     String jwtToken;
 
@@ -88,14 +90,14 @@ class MenuItemServiceTest {
         int price = 24_000;
 
         // when
-        MenuItemRequestDto requestDto = new MenuItemRequestDto(name, price, restaurantId, null);
+        CreateMenuItemRequestDto requestDto = new CreateMenuItemRequestDto(name, price, restaurantId, null);
 
-        MenuItemResponseDto menuItem = menuItemService.createMenuItem(requestDto);
+        MenuItemInternalResponseDto menuItem = menuItemService.createMenuItem(requestDto);
 
         // then
-        assertNotNull(menuItem.getId());
-        assertEquals(name, menuItem.getName());
-        assertEquals(price, menuItem.getPrice());
+        assertNotNull(menuItem.id());
+        assertEquals(name, menuItem.name());
+        assertEquals(price, menuItem.price());
 
         createMenuItem = menuItem;
     }
@@ -110,17 +112,17 @@ class MenuItemServiceTest {
         int price = 10_000;
 
         // when
-        MenuItemRequestDto requestDto = new MenuItemRequestDto(name, price, noneExistRestaurantId, null);
+        CreateMenuItemRequestDto requestDto = new CreateMenuItemRequestDto(name, price, noneExistRestaurantId, null);
 
-        MenuItemResponseDto menuItem = menuItemService.createMenuItem(requestDto);
+        MenuItemInternalResponseDto menuItem = menuItemService.createMenuItem(requestDto);
 
 
         // then
-        assertNotNull(menuItem.getId());
+        assertNotNull(menuItem.id());
 
-        assertNotNull(menuItem.getId());
-        assertEquals(name, menuItem.getName());
-        assertEquals(price, menuItem.getPrice());
+        assertNotNull(menuItem.id());
+        assertEquals(name, menuItem.name());
+        assertEquals(price, menuItem.price());
 
         createMenuItem = menuItem;
     }
@@ -168,7 +170,7 @@ class MenuItemServiceTest {
     void updateMenuItem() {
 
         // 메뉴의 가격 변경
-        MenuItemUpdateDto requestDto = new MenuItemUpdateDto("황금올리브 양념 콤보", 23500);
+        UpdateMenuItemRequestDto requestDto = new UpdateMenuItemRequestDto("황금올리브 양념 콤보", 23500);
 
         MenuItemResponseDto menuItem = menuItemService.updateMenuItem(createMenuItem.getId(), requestDto);
 

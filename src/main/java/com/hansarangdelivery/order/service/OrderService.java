@@ -1,6 +1,6 @@
 package com.hansarangdelivery.order.service;
 
-import com.hansarangdelivery.menu.model.MenuItem;
+import com.hansarangdelivery.menu.domain.model.MenuItem;
 import com.hansarangdelivery.order.dto.OrderRequestDto;
 import com.hansarangdelivery.order.dto.OrderResponseDto;
 import com.hansarangdelivery.global.exception.ForbiddenActionException;
@@ -15,7 +15,7 @@ import com.hansarangdelivery.restaurant.model.Restaurant;
 import com.hansarangdelivery.restaurant.service.RestaurantService;
 import com.hansarangdelivery.address.service.DeliveryAddressService;
 import com.hansarangdelivery.location.service.LocationService;
-import com.hansarangdelivery.menu.service.MenuItemService;
+import com.hansarangdelivery.menu.application.service.MenuItemService;
 import com.hansarangdelivery.payment.service.PaymentService;
 import com.hansarangdelivery.user.model.User;
 import lombok.RequiredArgsConstructor;
