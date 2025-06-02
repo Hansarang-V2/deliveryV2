@@ -1,12 +1,12 @@
-package com.hansarangdelivery.api;
+package com.hansarangdelivery.restaurant.presentation;
 
 import com.hansarangdelivery.config.PageableConfig;
 import com.hansarangdelivery.global.dto.PageResponseDto;
-import com.hansarangdelivery.restaurant.dto.RestaurantRequestDto;
-import com.hansarangdelivery.restaurant.dto.RestaurantResponseDto;
+import com.hansarangdelivery.restaurant.application.dto.RestaurantRequestDto;
+import com.hansarangdelivery.restaurant.application.dto.RestaurantResponseDto;
 import com.hansarangdelivery.global.dto.ResultResponseDto;
 import com.hansarangdelivery.security.UserDetailsImpl;
-import com.hansarangdelivery.restaurant.service.RestaurantService;
+import com.hansarangdelivery.restaurant.infrastructure.RestaurantServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -29,7 +29,7 @@ import java.util.UUID;
 @Tag(name = "Restaurant", description = "음식점 관리 API")
 public class RestaurantController {
 
-    private final RestaurantService restaurantService;
+    private final RestaurantServiceImpl restaurantServiceImpl;
 
     @Operation(summary = "음식점 등록", description = "새로운 음식점을 등록합니다.")
     @ApiResponse(responseCode = "200", description = "가게 등록 성공")
@@ -59,7 +59,7 @@ public class RestaurantController {
             )
         )
         @RequestBody @Valid RestaurantRequestDto requestDto) {
-        RestaurantResponseDto response = restaurantService.register(requestDto);
+        RestaurantResponseDto response = restaurantServiceImpl.register(requestDto);
         return new ResultResponseDto<>("가게 등록 성공", 200, response);
     }
 
@@ -72,7 +72,7 @@ public class RestaurantController {
     @GetMapping("/{restaurantId}")
     public ResultResponseDto<RestaurantResponseDto> readRestaurant(
         @Parameter(description = "음식점 ID") @PathVariable UUID restaurantId) {
-        RestaurantResponseDto responseDto = restaurantService.getRestaurantInfo(restaurantId);
+        RestaurantResponseDto responseDto = restaurantServiceImpl.getRestaurantInfo(restaurantId);
         return new ResultResponseDto<>("가게 조회 성공", 200, responseDto);
     }
 
@@ -87,7 +87,7 @@ public class RestaurantController {
     public ResultResponseDto<RestaurantResponseDto> updateRestaurant(
         @Parameter(description = "음식점 ID") @PathVariable UUID restaurantId,
         @RequestBody @Valid RestaurantRequestDto requestDto) {
-        RestaurantResponseDto result = restaurantService.updateRestaurant(restaurantId, requestDto);
+        RestaurantResponseDto result = restaurantServiceImpl.updateRestaurant(restaurantId, requestDto);
         return new ResultResponseDto<>("가게 수정 성공", 200, result);
     }
 
@@ -102,7 +102,7 @@ public class RestaurantController {
     public ResultResponseDto<RestaurantResponseDto> deleteRestaurant(
         @Parameter(hidden = true) @AuthenticationPrincipal UserDetailsImpl userDetails,
         @Parameter(description = "음식점 ID") @PathVariable UUID restaurantId) {
-        RestaurantResponseDto result = restaurantService.deleteRestaurant(userDetails.getUser(), restaurantId);
+        RestaurantResponseDto result = restaurantServiceImpl.deleteRestaurant(userDetails.getUser(), restaurantId);
         return new ResultResponseDto<>("가게 삭제 성공", 200, result);
     }
 
@@ -123,7 +123,7 @@ public class RestaurantController {
         @Parameter(description = "가게의 이름에 포함될 단어") @RequestParam(required = false) String search,
         @Parameter(description = "카테고리명") @RequestParam(required = false) String category) {
         PageableConfig.validatePageSize(pageable);
-        PageResponseDto<RestaurantResponseDto> restaurants = restaurantService.searchRestaurants(pageable, search, category);
+        PageResponseDto<RestaurantResponseDto> restaurants = restaurantServiceImpl.searchRestaurants(pageable, search, category);
         return new ResultResponseDto<>("가게 검색 성공", 200, restaurants);
     }
 }

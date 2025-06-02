@@ -2,16 +2,16 @@ package com.hansarangdelivery.restaurant;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hansarangdelivery.HansarangDeliveryApplication;
-import com.hansarangdelivery.restaurant.dto.RestaurantRequestDto;
+import com.hansarangdelivery.restaurant.application.dto.RestaurantRequestDto;
 import com.hansarangdelivery.category.model.Category;
 import com.hansarangdelivery.location.model.Location;
-import com.hansarangdelivery.restaurant.model.Restaurant;
+import com.hansarangdelivery.restaurant.domain.Restaurant;
 import com.hansarangdelivery.user.model.User;
 import com.hansarangdelivery.user.model.UserRole;
 import com.hansarangdelivery.security.jwt.JwtUtil;
 import com.hansarangdelivery.category.repository.CategoryRepository;
 import com.hansarangdelivery.location.repository.LocationRepository;
-import com.hansarangdelivery.restaurant.repository.RestaurantRepository;
+import com.hansarangdelivery.restaurant.infrastructure.JpaRestaurantRepository;
 import com.hansarangdelivery.user.repository.UserRepository;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class RestaurantIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    private JpaRestaurantRepository jpaRestaurantRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -73,7 +73,7 @@ class RestaurantIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        restaurantRepository.deleteAll();
+        jpaRestaurantRepository.deleteAll();
         userRepository.deleteAll();
         categoryRepository.deleteAll();
         locationRepository.deleteAll();
@@ -190,7 +190,7 @@ class RestaurantIntegrationTest {
 
         Restaurant restaurant = new Restaurant(
             "테스트 음식점", categoryId, ownerId,locationId);
-        restaurantRepository.save(restaurant);
+        jpaRestaurantRepository.save(restaurant);
         entityManager.flush();
         entityManager.clear();
         return restaurant.getId();

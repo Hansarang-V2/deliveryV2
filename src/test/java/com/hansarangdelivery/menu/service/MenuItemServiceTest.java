@@ -5,8 +5,8 @@ import com.hansarangdelivery.global.exception.ResourceNotFoundException;
 import com.hansarangdelivery.menu.dto.MenuItemRequestDto;
 import com.hansarangdelivery.menu.dto.MenuItemResponseDto;
 import com.hansarangdelivery.menu.dto.MenuItemUpdateDto;
-import com.hansarangdelivery.restaurant.model.Restaurant;
-import com.hansarangdelivery.restaurant.repository.RestaurantRepository;
+import com.hansarangdelivery.restaurant.domain.Restaurant;
+import com.hansarangdelivery.restaurant.infrastructure.JpaRestaurantRepository;
 import com.hansarangdelivery.security.jwt.JwtUtil;
 import com.hansarangdelivery.user.model.User;
 import com.hansarangdelivery.user.repository.UserRepository;
@@ -44,7 +44,7 @@ class MenuItemServiceTest {
     @Autowired
     UserRepository userRepository;
     @Autowired
-    RestaurantRepository restaurantRepository;
+    JpaRestaurantRepository jpaRestaurantRepository;
 
     User owner;
 
@@ -76,7 +76,7 @@ class MenuItemServiceTest {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        restaurant = jpaRestaurantRepository.findById(restaurantId).orElse(null);
     }
 
     @Test

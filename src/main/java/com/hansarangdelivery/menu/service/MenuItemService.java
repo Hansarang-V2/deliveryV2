@@ -6,8 +6,7 @@ import com.hansarangdelivery.menu.dto.MenuItemResponseDto;
 import com.hansarangdelivery.menu.dto.MenuItemUpdateDto;
 import com.hansarangdelivery.global.dto.PageResponseDto;
 import com.hansarangdelivery.menu.model.MenuItem;
-import com.hansarangdelivery.restaurant.repository.RestaurantRepository;
-import com.hansarangdelivery.restaurant.service.RestaurantExistService;
+import com.hansarangdelivery.restaurant.infrastructure.RestaurantServiceImpl;
 import com.hansarangdelivery.user.model.User;
 import com.hansarangdelivery.global.exception.DuplicateResourceException;
 import com.hansarangdelivery.global.exception.ResourceNotFoundException;
@@ -31,7 +30,7 @@ public class MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
 
-    private final RestaurantExistService restaurantExistService;
+    private final RestaurantServiceImpl restaurantExistService;
 
     public MenuItemResponseDto createMenuItem(MenuItemRequestDto requestDto) {
         MenuItem menuItem = new MenuItem(

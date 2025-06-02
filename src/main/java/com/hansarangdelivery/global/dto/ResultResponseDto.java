@@ -5,10 +5,9 @@ import com.hansarangdelivery.category.dto.CategoryResponseDto;
 import com.hansarangdelivery.location.dto.LocationResponseDto;
 import com.hansarangdelivery.menu.dto.MenuItemResponseDto;
 import com.hansarangdelivery.order.dto.OrderResponseDto;
-import com.hansarangdelivery.restaurant.dto.RestaurantResponseDto;
+import com.hansarangdelivery.restaurant.application.dto.RestaurantResponseDto;
 import com.hansarangdelivery.review.dto.ReviewResponseDto;
 import com.hansarangdelivery.user.dto.UserResponseDto;
-import io.swagger.v3.oas.annotations.links.Link;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 

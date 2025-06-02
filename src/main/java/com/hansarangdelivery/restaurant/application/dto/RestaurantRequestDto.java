@@ -1,4 +1,4 @@
-package com.hansarangdelivery.restaurant.dto;
+package com.hansarangdelivery.restaurant.application.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.UUID;

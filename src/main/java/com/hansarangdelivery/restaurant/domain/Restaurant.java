@@ -1,7 +1,7 @@
-package com.hansarangdelivery.restaurant.model;
+package com.hansarangdelivery.restaurant.domain;
 
 import com.hansarangdelivery.global.model.TimeStamped;
-import com.hansarangdelivery.restaurant.dto.RestaurantRequestDto;
+import com.hansarangdelivery.restaurant.application.dto.RestaurantRequestDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

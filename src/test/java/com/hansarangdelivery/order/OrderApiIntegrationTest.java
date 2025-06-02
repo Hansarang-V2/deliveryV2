@@ -18,8 +18,8 @@ import com.hansarangdelivery.order.model.OrderItem;
 import com.hansarangdelivery.order.model.OrderStatus;
 import com.hansarangdelivery.order.model.OrderType;
 import com.hansarangdelivery.order.repository.OrderRepository;
-import com.hansarangdelivery.restaurant.model.Restaurant;
-import com.hansarangdelivery.restaurant.repository.RestaurantRepository;
+import com.hansarangdelivery.restaurant.domain.Restaurant;
+import com.hansarangdelivery.restaurant.infrastructure.JpaRestaurantRepository;
 import com.hansarangdelivery.user.model.User;
 import com.hansarangdelivery.user.model.UserRole;
 import com.hansarangdelivery.user.repository.UserRepository;
@@ -77,7 +77,7 @@ public class OrderApiIntegrationTest {
 
 
     @Autowired
-    private RestaurantRepository restaurantRepository;
+    private JpaRestaurantRepository jpaRestaurantRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -115,7 +115,7 @@ public class OrderApiIntegrationTest {
         // 기존 데이터 삭제
         orderRepository.deleteAll();
         userRepository.deleteAll();
-        restaurantRepository.deleteAll();
+        jpaRestaurantRepository.deleteAll();
         categoryRepository.deleteAll();
         locationRepository.deleteAll();
         menuItemRepository.deleteAll();
@@ -148,11 +148,11 @@ public class OrderApiIntegrationTest {
 
         // 5. 테스트용 레스토랑 생성 및 저장
         Restaurant testRestaurant = new Restaurant("한사랑 치킨", testCategoryId, owner.getId(), testLocationId);
-        restaurantRepository.save(testRestaurant);
+        jpaRestaurantRepository.save(testRestaurant);
         testRestaurantId = testRestaurant.getId();
 
         // 레스토랑 저장 확인
-        Optional<Restaurant> savedRestaurant = restaurantRepository.findById(testRestaurant.getId());
+        Optional<Restaurant> savedRestaurant = jpaRestaurantRepository.findById(testRestaurant.getId());
         if (savedRestaurant.isEmpty()) {
             throw new RuntimeException("테스트 데이터 저장 실패: restaurantId = " + testRestaurantId);
         }

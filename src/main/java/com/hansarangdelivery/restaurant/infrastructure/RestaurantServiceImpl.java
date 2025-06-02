@@ -1,10 +1,11 @@
-package com.hansarangdelivery.restaurant.service;
+package com.hansarangdelivery.restaurant.infrastructure;
 
 import com.hansarangdelivery.location.dto.LocationResponseDto;
 import com.hansarangdelivery.global.dto.PageResponseDto;
-import com.hansarangdelivery.restaurant.dto.RestaurantRequestDto;
-import com.hansarangdelivery.restaurant.dto.RestaurantResponseDto;
-import com.hansarangdelivery.restaurant.model.Restaurant;
+import com.hansarangdelivery.restaurant.application.RestaurantService;
+import com.hansarangdelivery.restaurant.application.dto.RestaurantRequestDto;
+import com.hansarangdelivery.restaurant.application.dto.RestaurantResponseDto;
+import com.hansarangdelivery.restaurant.domain.Restaurant;
 import com.hansarangdelivery.review.service.ReviewService;
 import com.hansarangdelivery.category.service.CategoryService;
 import com.hansarangdelivery.location.service.LocationService;
@@ -12,8 +13,6 @@ import com.hansarangdelivery.menu.service.MenuItemService;
 import com.hansarangdelivery.user.model.User;
 import com.hansarangdelivery.global.exception.DuplicateResourceException;
 import com.hansarangdelivery.global.exception.ResourceNotFoundException;
-import com.hansarangdelivery.restaurant.repository.RestaurantRepository;
-import com.hansarangdelivery.restaurant.repository.RestaurantRepositoryImpl;
 
 import com.hansarangdelivery.user.service.UserService;
 import java.time.LocalDateTime;
@@ -27,8 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class RestaurantService {
-    private final RestaurantRepository restaurantRepository;
+public class RestaurantServiceImpl implements RestaurantService {
+    private final JpaRestaurantRepository jpaRestaurantRepository;
     private final RestaurantRepositoryImpl restaurantRepositoryQuery;
 
     private final CategoryService categoryService;
@@ -37,14 +36,15 @@ public class RestaurantService {
     private final MenuItemService menuItemService;
     private final ReviewService reviewService;
 
+    @Override
     public RestaurantResponseDto register(RestaurantRequestDto requestDto) {
 //      가게 등록하기
         RestaurantRequestDto request = checkedRequest(requestDto);
         Restaurant restaurant = new Restaurant(request);
         double point = 0;
-        return new RestaurantResponseDto(restaurantRepository.save(restaurant),point);
+        return new RestaurantResponseDto(jpaRestaurantRepository.save(restaurant),point);
     }
-
+    @Override
     public RestaurantResponseDto getRestaurantInfo(UUID restaurantId) {
 //      가게 정보 조회하기 - 자세하게 보여줌
         Restaurant restaurant = checkedRestaurant(restaurantId);
@@ -52,10 +52,11 @@ public class RestaurantService {
     }
 
     @Transactional
+    @Override
     public RestaurantResponseDto updateRestaurant(UUID restaurantId, RestaurantRequestDto requestDto) {
         Restaurant restaurant = checkedRestaurant(restaurantId);
         restaurant.update(requestDto); // 찾은 음식점의 정보를 요청을 토대로 수정
-        restaurantRepository.save(restaurant);
+        jpaRestaurantRepository.save(restaurant);
         return getRestaurantResponseDto(restaurant);
     }
 
@@ -68,6 +69,7 @@ public class RestaurantService {
     }
 
     @Transactional
+    @Override
     public RestaurantResponseDto deleteRestaurant(User user, UUID restaurantId) {
         Restaurant restaurant = checkedRestaurant(restaurantId);
         String deletedBy = user.getId().toString(); // 인증된 사용자의 username을 deletedBy로 사용
@@ -77,9 +79,10 @@ public class RestaurantService {
             menuItemService.deleteMenuItemByRestaurantId(restaurantId,user); // 메뉴도 같이
         }
         double point = reviewService.countAverageRating(restaurant.getId());
-        return new RestaurantResponseDto(restaurantRepository.save(restaurant),point);
+        return new RestaurantResponseDto(jpaRestaurantRepository.save(restaurant),point);
     }
 
+    @Override
     public PageResponseDto<RestaurantResponseDto> searchRestaurants(Pageable pageable, String search, String category) {
         //  검색 조건에 맞는 음식점 리스트를 정렬해서 전달
         UUID categoryId=null;
@@ -100,7 +103,7 @@ public class RestaurantService {
 
     private Restaurant checkedRestaurant(UUID restaurantId) {
 //        음식점 존재 여부 확인
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+        Restaurant restaurant = jpaRestaurantRepository.findById(restaurantId)
             .orElseThrow(() -> new ResourceNotFoundException("유효하지 않은 음식점입니다."));
         if (restaurant.getDeletedAt() != null) {
             throw new ResourceNotFoundException("유효하지 않은 음식점입니다.");
@@ -110,9 +113,13 @@ public class RestaurantService {
 
 
     public Restaurant getRestaurantById(UUID restaurantId) {
-        return restaurantRepository.findById(restaurantId)
+        return jpaRestaurantRepository.findById(restaurantId)
             .filter(restaurant -> restaurant.getDeletedAt() == null) // 삭제된 가게인지 확인
             .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 음식점을 찾을 수 없습니다: " + restaurantId));
+    }
+
+    public boolean isExist(UUID restaurantId) {
+        return jpaRestaurantRepository.existsById(restaurantId);
     }
 
     private RestaurantRequestDto checkedRequest(RestaurantRequestDto requestDto) {
@@ -130,7 +137,7 @@ public class RestaurantService {
         if (ownerId == null || !userService.isOwner(ownerId)) {
             throw new ResourceNotFoundException("유효하지 않은 가게주인입니다.");
         }
-        if (restaurantRepository.existsByNameAndOwnerAndLocation(name, ownerId, locationId)) {
+        if (jpaRestaurantRepository.existsByNameAndOwnerAndLocation(name, ownerId, locationId)) {
             throw new DuplicateResourceException("이미 같은 음식점이 존재합니다.");
         }
         return requestDto;

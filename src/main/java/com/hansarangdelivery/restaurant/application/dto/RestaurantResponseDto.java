@@ -1,6 +1,6 @@
-package com.hansarangdelivery.restaurant.dto;
+package com.hansarangdelivery.restaurant.application.dto;
 
-import com.hansarangdelivery.restaurant.model.Restaurant;
+import com.hansarangdelivery.restaurant.domain.Restaurant;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;

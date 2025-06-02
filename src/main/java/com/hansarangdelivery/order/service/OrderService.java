@@ -11,8 +11,8 @@ import com.hansarangdelivery.order.model.OrderStatus;
 import com.hansarangdelivery.order.model.OrderType;
 import com.hansarangdelivery.order.repository.OrderRepository;
 import com.hansarangdelivery.order.repository.OrderRepositoryQueryImpl;
-import com.hansarangdelivery.restaurant.model.Restaurant;
-import com.hansarangdelivery.restaurant.service.RestaurantService;
+import com.hansarangdelivery.restaurant.domain.Restaurant;
+import com.hansarangdelivery.restaurant.infrastructure.RestaurantServiceImpl;
 import com.hansarangdelivery.address.service.DeliveryAddressService;
 import com.hansarangdelivery.location.service.LocationService;
 import com.hansarangdelivery.menu.service.MenuItemService;
@@ -36,7 +36,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final MenuItemService menuItemService;
-    private final RestaurantService restaurantService; //  가게 정보 조회
+    private final RestaurantServiceImpl restaurantServiceImpl; //  가게 정보 조회
     private final OrderRepositoryQueryImpl orderRepositoryQuery;
     private final PaymentService paymentService;
     private final DeliveryAddressService deliveryAddress;
@@ -46,7 +46,7 @@ public class OrderService {
 
     @Transactional
     public OrderResponseDto createOrder(OrderRequestDto requestDto, User user) {
-        Restaurant restaurant = restaurantService.getRestaurantById(requestDto.getRestaurantId());
+        Restaurant restaurant = restaurantServiceImpl.getRestaurantById(requestDto.getRestaurantId());
         String storeName = restaurant.getName();
 
         UUID deliveryAddressId = deliveryAddress.readDeliveryAddress(user.getId()).getLocationId();

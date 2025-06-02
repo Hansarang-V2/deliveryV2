@@ -1,9 +1,9 @@
-package com.hansarangdelivery.restaurant.repository;
+package com.hansarangdelivery.restaurant.infrastructure;
 
 
-import static com.hansarangdelivery.restaurant.model.QRestaurant.restaurant;
+import static com.hansarangdelivery.restaurant.domain.QRestaurant.restaurant;
 
-import com.hansarangdelivery.restaurant.model.Restaurant;
+import com.hansarangdelivery.restaurant.domain.Restaurant;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.impl.JPAQueryFactory;
